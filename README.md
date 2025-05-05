@@ -1,5 +1,4 @@
-# PowerShellAzureAutomation
-Unleashing PowerShell in the Cloud with Azure Automation
+# Unleashing PowerShell in the Cloud with Azure Automation
 
 ## Abstract
 
