@@ -1,0 +1,7 @@
+# Ignore Azure Automation runbooks folder
+/demos/runbooks/
+
+# terraform files
+.terraform/
+*.lock.hcl
+
