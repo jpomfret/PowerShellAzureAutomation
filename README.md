@@ -10,8 +10,16 @@ Learn how you can use Azure Automation to automate routine tasks, schedule scrip
 
 We will walk through 
  - setting up Automation accounts
+   - Portal
+   - PowerShell
+   - terraform
  - creating and managing runbooks
  - integrating with other Azure services
  - handling some common scenarios including calling APIs.
 
 This will provide the knowledge you need to get your PowerShell running in the cloud.
+
+## Plan
+
+- terraform\github action to build environment?
+  - tests to make sure it's ready
