@@ -15,8 +15,7 @@ try {
     $AzureContext = Set-AzContext -SubscriptionName $AzureConnection.Subscription -DefaultProfile $AzureConnection
 }
 catch {
-    Write-Output "There is no system-assigned user identity. Aborting." 
-    exit
+    Throw "Issue connecting with managed identity. Aborting." 
 }
 
 # get disks that are not attached to any VM
@@ -35,6 +34,7 @@ try {
 
 # get network interfaces that are not attached to any VM
 try {
+    Write-Output "Retrieving unattached network interfaces..."
     $networkInterfaces = Get-AzNetworkInterface | Where-Object { $_.VirtualMachine -eq $null -and $_.PrivateEndpointText -eq 'null' }
     if ($networkInterfaces.Count -eq 0) {
         Write-Output "No unattached network interfaces found."
@@ -48,6 +48,7 @@ try {
 
 # get public IP addresses that are not attached to any network interface
 try {
+    Write-Output "Retrieving unattached public IP addresses..."
     $publicIPs = Get-AzPublicIpAddress | Where-Object { $_.IpConfiguration -eq $null }
 
     if ($publicIPs.Count -eq 0) {

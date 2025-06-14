@@ -64,8 +64,8 @@ try {
 if ($disks.Count -gt 0 -or $networkInterfaces.Count -gt 0 -or $publicIPs.Count -gt 0) {
     Write-Output "Creating Azure DevOps work item for cleanup..."
     # Create a new work item in Azure DevOps
-    
-    $token = (Get-AzAccessToken -AsSecureString:$false).token | ConvertFrom-SecureString -AsPlainText
+    Get-Module Az.Accounts
+    $token = (Get-AzAccessToken).token
     $headers = @{ Authorization = "Bearer $token"}
     
     $organization = "jpomfret7"
