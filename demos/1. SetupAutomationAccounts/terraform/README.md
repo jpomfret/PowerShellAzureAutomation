@@ -10,7 +10,7 @@ This project provisions an Azure Resource Group and an Azure Automation Account 
 
 ## Project Structure
 
-```
+```text
 terraform-azure-automation
 ├── main.tf
 ├── variables.tf
@@ -22,7 +22,12 @@ terraform-azure-automation
 
 ## Getting Started
 
+<<<<<<< Updated upstream
 1. **Clone the repository**:
+=======
+1. **Clone the repository** (if applicable):
+
+>>>>>>> Stashed changes
    ```bash
    git clone <repository-url>
    cd terraform-azure-automation
@@ -31,18 +36,25 @@ terraform-azure-automation
 
 2. **Initialize Terraform**:
    Run the following command to initialize the Terraform configuration:
+
    ```bash
    terraform init
    ```
 
 3. **Review the configuration**:
    You can see what resources will be created by running:
+
    ```bash
+<<<<<<< Updated upstream
    terraform plan -out terraform.plan
+=======
+   terraform plan -out tf.plan
+>>>>>>> Stashed changes
    ```
 
 4. **Apply the configuration**:
    To create the resources defined in the configuration, run:
+
    ```bash
    terraform apply "terraform.plan"
    ```
@@ -50,6 +62,7 @@ terraform-azure-automation
 ## Outputs
 
 After the resources are created, you can view the output values by running:
+
 ```bash
 terraform output
 ```
@@ -57,6 +70,7 @@ terraform output
 ## Cleanup
 
 To remove the resources created by this project, run:
+
 ```bash
 terraform destroy
 ```
