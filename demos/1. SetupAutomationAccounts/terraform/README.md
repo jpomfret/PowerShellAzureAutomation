@@ -22,17 +22,18 @@ terraform-azure-automation
 
 ## Getting Started
 
-<<<<<<< Updated upstream
-1. **Clone the repository**:
-=======
 1. **Clone the repository** (if applicable):
 
->>>>>>> Stashed changes
    ```bash
    git clone <repository-url>
    cd terraform-azure-automation
-   cd '.\demos\1. SetupAutomationAccounts\terraform\'
    ```
+
+1. move to right directory
+
+```bash
+cd '.\demos\1. SetupAutomationAccounts\terraform'
+```
 
 2. **Initialize Terraform**:
    Run the following command to initialize the Terraform configuration:
@@ -45,19 +46,17 @@ terraform-azure-automation
    You can see what resources will be created by running:
 
    ```bash
-<<<<<<< Updated upstream
-   terraform plan -out terraform.plan
-=======
    terraform plan -out tf.plan
->>>>>>> Stashed changes
    ```
 
 4. **Apply the configuration**:
    To create the resources defined in the configuration, run:
 
    ```bash
-   terraform apply "terraform.plan"
+   terraform apply "tf.plan"
    ```
+
+   Confirm the action when prompted.
 
 ## Outputs
 
