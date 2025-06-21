@@ -31,25 +31,25 @@ terraform-azure-automation
 
 1. move to right directory
 
-```bash
-cd '.\demos\1. SetupAutomationAccounts\terraform'
-```
+   ```bash
+   cd '.\demos\1. SetupAutomationAccounts\terraform'
+   ```
 
-2. **Initialize Terraform**:
+1. **Initialize Terraform**:
    Run the following command to initialize the Terraform configuration:
 
    ```bash
    terraform init
    ```
 
-3. **Review the configuration**:
+1. **Review the configuration**:
    You can see what resources will be created by running:
 
    ```bash
    terraform plan -out tf.plan
    ```
 
-4. **Apply the configuration**:
+1. **Apply the configuration**:
    To create the resources defined in the configuration, run:
 
    ```bash
