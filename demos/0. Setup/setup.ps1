@@ -28,18 +28,17 @@ try {
 }
 
 #TODO: also need 
-az login
+#az login
 
-Describe "Resource Group doesn't exist" {
-    It "should not find the resource group" {
-        $result = Get-AzResourceGroup -Name rg-psconfeu-001 -ErrorAction SilentlyContinue
-        $result | Should -BeNullOrEmpty
-    }
-}
+Invoke-Pester -Path $PSScriptRoot\tests\ -Output Detailed
+
+write-output ""
 
 Write-Warning "Things to do Jess!
- - Go put the subscription ID in the providers file
- - run terraform so it's created?
- - Get VSCode Extension loaded and signed in#
- - pptx open?
- "
+- Go put the subscription ID in the providers file
+- run terraform so it's created?
+- Get VSCode Extension loaded and signed in
+- pptx open?
+- clean up ADO?
+- login to ADO
+"
