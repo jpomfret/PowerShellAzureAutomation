@@ -15,7 +15,8 @@ try {
     $AzureContext = Set-AzContext -SubscriptionName $AzureConnection.Subscription -DefaultProfile $AzureConnection
 }
 catch {
-    Throw "Issue connecting with managed identity. Aborting." 
+    Throw "Issue connecting with Managed Service Identity. Aborting." 
+    exit
 }
 
 # get disks that are not attached to any VM
@@ -34,7 +35,6 @@ try {
 
 # get network interfaces that are not attached to any VM
 try {
-    Write-Output "Retrieving unattached network interfaces..."
     $networkInterfaces = Get-AzNetworkInterface | Where-Object { $_.VirtualMachine -eq $null -and $_.PrivateEndpointText -eq 'null' }
     if ($networkInterfaces.Count -eq 0) {
         Write-Output "No unattached network interfaces found."
@@ -48,7 +48,6 @@ try {
 
 # get public IP addresses that are not attached to any network interface
 try {
-    Write-Output "Retrieving unattached public IP addresses..."
     $publicIPs = Get-AzPublicIpAddress | Where-Object { $_.IpConfiguration -eq $null }
 
     if ($publicIPs.Count -eq 0) {
@@ -59,4 +58,32 @@ try {
     }
 } catch {
     Throw "Error retrieving public IP addresses: $_"
+}
+
+# If there are things to clean up - create a work item in Azure DevOps
+if ($disks.Count -gt 0 -or $networkInterfaces.Count -gt 0 -or $publicIPs.Count -gt 0) {
+    Write-Output "Creating Azure DevOps work item for cleanup..."
+
+    # Create a new work item in Azure DevOps
+    $token = (Get-AzAccessToken).token # NOTE: This line depends on Az.Accounts module being used!
+    $headers = @{ Authorization = "Bearer $token"}
+    
+    $organization = "jpomfret7"
+    $project = "ProjectPomfret"
+    $type = "Task"
+    $uri = ("https://dev.azure.com/{0}/{1}/_apis/wit/workitems/`${2}?api-version=7.1" -f $organization, $project , $type)
+    
+    $workItem = @(
+    @{
+        "op"    = "add"
+        "path"  = "/fields/System.Title"
+        "value" = ("Azure Cleanup Task - {0}" -f (Get-Date).ToString("yyyy-MM-dd HH:mm:ss"))
+    },
+    @{
+        "op"    = "add"
+        "path"  = "/fields/System.Description"
+        "value" = "Unattached disks: $($disks.Count), Unattached network interfaces: $($networkInterfaces.Count), Unattached public IPs: $($publicIPs.Count)"
+    }
+) | ConvertTo-Json
+    Invoke-RestMethod -Uri $uri -Method Post -Body $workItem -ContentType "application/json-patch+json" -Headers $headers
 }

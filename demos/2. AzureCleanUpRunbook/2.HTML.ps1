@@ -15,7 +15,7 @@ try {
     $AzureContext = Set-AzContext -SubscriptionName $AzureConnection.Subscription -DefaultProfile $AzureConnection
 }
 catch {
-    Write-Output "There is no system-assigned user identity. Aborting." 
+    Throw "Issue connecting with Managed Service Identity. Aborting." 
     exit
 }
 
@@ -74,7 +74,49 @@ if ($disks.Count -gt 0 -or $networkInterfaces.Count -gt 0 -or $publicIPs.Count -
     $uri = ("https://dev.azure.com/{0}/{1}/_apis/wit/workitems/`${2}?api-version=7.1" -f $organization, $project , $type)
 
     # Create the description in html format
-    $cssStyle = Get-AutomationVariable -Name CompanyCss
+    $cssStyle = @"
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin-bottom: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        th {
+            background-color: #0078d4;
+            color: white;
+            text-align: left;
+            padding: 8px;
+        }
+        td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #dcdcdc;
+        }
+        h3, h4 {
+            color: #333333;
+            margin-top: 20px;
+        }
+        ul {
+            list-style-type: circle;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        a {
+            color: #0366d6;
+            text-decoration: none;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+    </style>
+"@
 
     $summary = [PSCustomObject]@{
         ResourceType = "Unattached Disks"

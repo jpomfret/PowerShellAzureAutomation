@@ -28,7 +28,7 @@ try {
 }
 
 #TODO: also need 
-#az login
+az login
 
 Invoke-Pester -Path $PSScriptRoot\tests\ -Output Detailed
 
@@ -36,9 +36,10 @@ write-output ""
 
 Write-Warning "Things to do Jess!
 - Go put the subscription ID in the providers file
-- run terraform so it's created?
 - Get VSCode Extension loaded and signed in
 - pptx open?
 - clean up ADO?
+    - tickets and user\permissions
 - login to ADO
+
 "
