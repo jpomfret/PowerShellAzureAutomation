@@ -27,10 +27,11 @@ try {
     Write-Warning "Failed to remove resource group: $_"
 }
 
-#TODO: also need 
 az login
 
 Invoke-Pester -Path $PSScriptRoot\tests\ -Output Detailed
+
+Set-Location $PSScriptRoot\..\..
 
 write-output ""
 
@@ -41,5 +42,6 @@ Write-Warning "Things to do Jess!
 - clean up ADO?
     - tickets and user\permissions
 - login to ADO
+- open ZoomIt
 
 "

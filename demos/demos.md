@@ -11,8 +11,6 @@
 
 ## Runbook Code
 
-    1. Through VSCode extenstion - add 3.createWI.ps1 code and run it
-       1. failed
-       2. permissions
-    2. Add PSHTML code and make it pretty
-       1. 4.WiHTML
+    1. Through VSCode extension 
+    2. add `1.CreateWI.ps1` code and run it
+    3. update to `2.HTML.ps1` code and run it
