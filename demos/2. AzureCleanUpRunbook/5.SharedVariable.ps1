@@ -74,63 +74,66 @@ if ($disks.Count -gt 0 -or $networkInterfaces.Count -gt 0 -or $publicIPs.Count -
     $uri = ("https://dev.azure.com/{0}/{1}/_apis/wit/workitems/`${2}?api-version=7.1" -f $organization, $project , $type)
 
     # Create the description in html format
-    # Create the HTML description with summary table and details
-    # Create the HTML description with CSS-styled summary table and details
     $cssStyle = Get-AutomationVariable -Name CompanyCss
 
-    $htmlDesc = $cssStyle + @"
-    <table>
-    <tr>
-        <th>Resource Type</th>
-        <th>Count</th>
-    </tr>
-    <tr>
-        <td>Unattached Disks</td>
-        <td>$($disks.Count)</td>
-    </tr>
-    <tr>
-        <td>Unattached Network Interfaces</td>
-        <td>$($networkInterfaces.Count)</td>
-    </tr>
-    <tr>
-        <td>Unattached Public IPs</td>
-        <td>$($publicIPs.Count)</td>
-    </tr>
-    </table>
-    <h3>Detailed Information</h3>
-"@
+    $summary = [PSCustomObject]@{
+        ResourceType = "Unattached Disks"
+        Count        = $disks.Count
+    }, [PSCustomObject]@{
+        ResourceType = "Unattached Network Interfaces"
+        Count        = $networkInterfaces.Count
+    }, [PSCustomObject]@{
+        ResourceType = "Unattached Public IPs"
+        Count        = $publicIPs.Count
+    } | ConvertTo-PSHTMLTable
+
+    $htmlDesc = $cssStyle + $summary
+    $htmlDesc += h3 "Detailed Information"
 
     # Get the subscription ID for building portal links
     $subscriptionId = $AzureContext.Subscription.Id
 
     # Add disk details with links
     if ($disks.Count -gt 0) {
-        $htmlDesc += "<h4>Unattached Disks</h4><ul>"
-        foreach ($disk in $disks) {
-            $portalLink = "https://portal.azure.com/#@/resource/subscriptions/$subscriptionId/resourceGroups/$($disk.ResourceGroupName)/providers/Microsoft.Compute/disks/$($disk.Name)"
-            $htmlDesc += "<li><a href='$portalLink' target='_blank'>$($disk.Name)</a> | Resource Group: $($disk.ResourceGroupName) | Size: $($disk.DiskSizeGB) GB | Location: $($disk.Location)</li>"
+
+        $htmlDesc += h4 "Unattached Disks"
+        $htmlDesc += ul {
+            foreach ($disk in $disks) {
+                $portalLink = "https://portal.azure.com/#@/resource/subscriptions/$subscriptionId/resourceGroups/$($disk.ResourceGroupName)/providers/Microsoft.Compute/disks/$($disk.Name)"
+                li {
+                    a -href $portalLink -target "_blank" -Content $disk.Name 
+                    " | Resource Group: $($disk.ResourceGroupName) | Size: $($disk.DiskSizeGB) GB | Location: $($disk.Location)"
+                }
+            }
         }
-        $htmlDesc += "</ul>"
     }
 
     # Add network interface details with links
     if ($networkInterfaces.Count -gt 0) {
-        $htmlDesc += "<h4>Unattached Network Interfaces</h4><ul>"
-        foreach ($nic in $networkInterfaces) {
-            $portalLink = "https://portal.azure.com/#@/resource/subscriptions/$subscriptionId/resourceGroups/$($nic.ResourceGroupName)/providers/Microsoft.Network/networkInterfaces/$($nic.Name)"
-            $htmlDesc += "<li><a href='$portalLink' target='_blank'>$($nic.Name)</a> | Resource Group: $($nic.ResourceGroupName) | Location: $($nic.Location)</li>"
+        $htmlDesc += h4 "Unattached Network Interfaces"
+        $htmlDesc += ul {
+            foreach ($nic in $networkInterfaces) {
+                $portalLink = "https://portal.azure.com/#@/resource/subscriptions/$subscriptionId/resourceGroups/$($nic.ResourceGroupName)/providers/Microsoft.Network/networkInterfaces/$($nic.Name)"
+                li {
+                    a -href $portalLink -target "_blank" -Content $nic.Name 
+                    " | Resource Group: $($nic.ResourceGroupName) | Location: $($nic.Location)"
+                }
+            }
         }
-        $htmlDesc += "</ul>"
     }
 
     # Add public IP details with links
     if ($publicIPs.Count -gt 0) {
-        $htmlDesc += "<h4>Unattached Public IPs</h4><ul>"
-        foreach ($ip in $publicIPs) {
-            $portalLink = "https://portal.azure.com/#@/resource/subscriptions/$subscriptionId/resourceGroups/$($ip.ResourceGroupName)/providers/Microsoft.Network/publicIPAddresses/$($ip.Name)"
-            $htmlDesc += "<li><a href='$portalLink' target='_blank'>$($ip.Name)</a> | Resource Group: $($ip.ResourceGroupName) | IP: $($ip.IpAddress) | Location: $($ip.Location)</li>"
+        $htmlDesc += h4 "Unattached Public IPs"
+        $htmlDesc += ul {
+            foreach ($ip in $publicIPs) {
+                $portalLink = "https://portal.azure.com/#@/resource/subscriptions/$subscriptionId/resourceGroups/$($ip.ResourceGroupName)/providers/Microsoft.Network/publicIPAddresses/$($ip.Name)"
+                li {
+                    a -href $portalLink -target "_blank" -Content $ip.Name 
+                    " | Resource Group: $($ip.ResourceGroupName) | IP: $($ip.IpAddress) | Location: $($ip.Location)"
+                }
+            }
         }
-        $htmlDesc += "</ul>"
     }
 
     # Then update your workItem array to use this HTML description
