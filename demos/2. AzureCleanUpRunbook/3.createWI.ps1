@@ -63,9 +63,9 @@ try {
 # If there are things to clean up - create a work item in Azure DevOps
 if ($disks.Count -gt 0 -or $networkInterfaces.Count -gt 0 -or $publicIPs.Count -gt 0) {
     Write-Output "Creating Azure DevOps work item for cleanup..."
+
     # Create a new work item in Azure DevOps
-    Get-Module Az.Accounts
-    $token = (Get-AzAccessToken).token
+    $token = (Get-AzAccessToken).token # NOTE: This line depends on Az.Accounts module being used!
     $headers = @{ Authorization = "Bearer $token"}
     
     $organization = "jpomfret7"
